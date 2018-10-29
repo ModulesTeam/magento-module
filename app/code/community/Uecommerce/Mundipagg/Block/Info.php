@@ -93,35 +93,17 @@ class Uecommerce_Mundipagg_Block_Info extends Mage_Payment_Block_Info
 
     public function getInstallmentsNumber($ccQty, $ccPos)
     {
-        if ($ccQty == 1) {
-            $installments = $this
-                ->getInfo()
-                ->getAdditionalInformation(
-                    "mundipagg_creditcard_credito_parcelamento_1_1"
-                );
+        $methodCode = $this->getInfo()->getAdditionalInformation('method');
 
-            if (!$installments) {
-                $installments = $this
-                    ->getInfo()
-                    ->getAdditionalInformation(
-                        "mundipagg_creditcard_new_credito_parcelamento_1_1"
-                    );
-            }
-        } else {
-            $installments = $this
-                ->getInfo()
-                ->getAdditionalInformation(
-                    "mundipagg_twocreditcards_credito_parcelamento_{$ccQty}_{$ccPos}"
-                );
+        $new = $this->getInfo()
+            ->getAdditionalInformation(
+                "{$methodCode}_token_{$ccQty}_{$ccPos}"
+            );
+        $new = $new === 'new' ? 'new_' : '';
 
-            if (!$installments) {
-                $installments = $this
-                    ->getInfo()
-                    ->getAdditionalInformation(
-                        "mundipagg_twocreditcards_new_credito_parcelamento_{$ccQty}_{$ccPos}"
-                    );
-            }
-        }
+        $installments = $this->getInfo()->getAdditionalInformation(
+            "{$methodCode}_" . $new . "credito_parcelamento_{$ccQty}_{$ccPos}"
+        );
 
         $installments .= "x";
 

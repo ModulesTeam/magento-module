@@ -408,6 +408,7 @@ class Uecommerce_Mundipagg_Helper_TwoCreditCardsPostNotificationHandler extends 
 
         if (intval(preg_replace('/[^0-9]/', '', $cardPrefix)) > 1) {
             sleep(6);
+            $order->load($order->getEntityId());
         }
 
         return $order;
